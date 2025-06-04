@@ -9,7 +9,7 @@ exports.handler = async (event) => {
   const { username, answer } = payload;
 
   // ここでリポジトリ情報を指定
-  const owner = "your-github-username";
+  const owner = "okmr-1224";
   const repo = "survey-responses";
   const filePath = "responses.json";
 
