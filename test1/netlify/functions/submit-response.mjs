@@ -11,16 +11,25 @@ export async function handler(event) {
   const repo = "Question";
   const filePath = "data/responses.json";
 
-  const branch = "main";
+  const baseBranch = "main";
   const prBranch = `response-${Date.now()}`;
   const commitMessage = `Add response from ${username}`;
 
   try {
+    // ✅ mainブランチの最新コミットのSHAを取得
+    const { data: refData } = await octokit.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${baseBranch}`,
+    });
+    const baseSha = refData.object.sha;
+
+    // ✅ responses.json の現在の中身を取得
     const { data: file } = await octokit.repos.getContent({
       owner,
       repo,
       path: filePath,
-      ref: branch,
+      ref: baseBranch,
     });
 
     const content = Buffer.from(file.content, "base64").toString();
@@ -29,13 +38,15 @@ export async function handler(event) {
 
     const newContent = Buffer.from(JSON.stringify(json, null, 2)).toString("base64");
 
+    // ✅ 新しいブランチを baseSha から作成
     await octokit.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${prBranch}`,
-      sha: file.sha,
+      sha: baseSha, // ← これが超重要！！
     });
 
+    // ✅ そのブランチに responses.json をアップデート
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
@@ -43,14 +54,16 @@ export async function handler(event) {
       message: commitMessage,
       content: newContent,
       branch: prBranch,
+      sha: file.sha, // ← これはOK（元ファイルのバージョン）
     });
 
+    // ✅ PR 作成
     const { data: pr } = await octokit.pulls.create({
       owner,
       repo,
       title: commitMessage,
       head: prBranch,
-      base: branch,
+      base: baseBranch,
       body: "New survey response submitted.",
     });
 
