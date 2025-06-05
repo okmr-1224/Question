@@ -32,50 +32,52 @@
   </div>
 
   <script>
-    async function fetchData() {
-      const res = await fetch("../../data/responses.json");
-      const data = await res.json();
+  async function drawChart() {
+    try {
+      const response = await fetch('../../data/responses.json');
+      if (!response.ok) throw new Error('Fetch failed!');
+      const data = await response.json();
+      console.log("読み込んだデータ：", data);
 
-      // 集計：answerの数をカウント
+      // データを集計する処理ここから
       const counts = {};
-      data.forEach(({ answer }) => {
-        counts[answer] = (counts[answer] || 0) + 1;
+      data.forEach(entry => {
+        counts[entry.answer] = (counts[entry.answer] || 0) + 1;
       });
 
       const labels = Object.keys(counts);
       const values = Object.values(counts);
-      const colors = ["#FF99CC", "#FFCC99", "#99CCFF", "#CCFFCC", "#FFD700"];
 
-      const ctx = document.getElementById("responseChart").getContext("2d");
+      const ctx = document.getElementById('chart').getContext('2d');
       new Chart(ctx, {
-        type: "pie",
+        type: 'pie',
         data: {
-          labels,
+          labels: labels,
           datasets: [{
             data: values,
-            backgroundColor: colors,
-            borderColor: "#fff",
-            borderWidth: 2
+            backgroundColor: ['#f87171', '#34d399', '#60a5fa', '#fbbf24', '#c084fc'],
           }]
         },
         options: {
-          responsive: true,
           plugins: {
             legend: {
-              position: 'bottom',
               labels: {
-                color: '#333',
                 font: {
-                  size: 14
+                  size: 16
                 }
               }
             }
           }
         }
       });
+    } catch (error) {
+      console.error("読み込み失敗！", error);
+      document.getElementById('chart-container').innerHTML = "<p style='color:red;'>読み込みに失敗しました😢</p>";
     }
+  }
 
-    fetchData();
-  </script>
+  drawChart();
+</script>
+
 </body>
 </html>
