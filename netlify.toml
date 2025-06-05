@@ -1,4 +1,4 @@
 [build]
-  base = "test1"
+  base = "."
   publish = "test1"
   functions = "test1/netlify/functions"
