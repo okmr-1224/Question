@@ -1,31 +1,28 @@
-<!-- survey.html -->
-<form id="surveyForm">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>アンケートフォーム</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <h1>好きなタイプは？</h1>
+  <form id="survey-form">
     <input type="text" name="username" placeholder="名前" required />
-    <select name="answer">
-      <option value="炎">炎</option>
-      <option value="水">水</option>
-      <option value="草">草</option>
+    <select name="answer" required>
+      <option value="">選んでね</option>
+      <option value="炎">🔥 炎</option>
+      <option value="水">💧 水</option>
+      <option value="草">🌿 草</option>
     </select>
     <button type="submit">送信</button>
   </form>
-  
-  <script>
-    const form = document.getElementById('surveyForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const payload = {
-        username: formData.get('username'),
-        answer: formData.get('answer'),
-      };
-  
-      const res = await fetch('/.netlify/functions/submit-response', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-  
-      const result = await res.json();
-      alert(`送信完了！PR URL: ${result.url}`);
-    });
-  </script>
-  
+
+  <h2>みんなの回答🌟</h2>
+  <canvas id="chart" width="400" height="400"></canvas>
+
+  <p id="message"></p>
+</body>
+</html>
