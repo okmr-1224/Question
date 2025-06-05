@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>アンケート結果</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Arial Rounded MT Bold', 'Hiragino Maru Gothic Pro', sans-serif;
+      background: #fffafc;
+      color: #333;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #ff66a5;
+    }
+    #chart-container {
+      max-width: 500px;
+      margin: auto;
+      background: #ffe0f0;
+      border-radius: 2rem;
+      padding: 1.5rem;
+      box-shadow: 0 5px 10px rgba(255, 102, 165, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>アンケート結果</h1>
+  <div id="chart-container">
+    <canvas id="responseChart"></canvas>
+  </div>
+
+  <script>
+    async function fetchData() {
+      const res = await fetch("../data/responses.json");
+      const data = await res.json();
+
+      // 集計：answerの数をカウント
+      const counts = {};
+      data.forEach(({ answer }) => {
+        counts[answer] = (counts[answer] || 0) + 1;
+      });
+
+      const labels = Object.keys(counts);
+      const values = Object.values(counts);
+      const colors = ["#FF99CC", "#FFCC99", "#99CCFF", "#CCFFCC", "#FFD700"];
+
+      const ctx = document.getElementById("responseChart").getContext("2d");
+      new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderColor: "#fff",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#333',
+                font: {
+                  size: 14
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>
