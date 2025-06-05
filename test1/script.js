@@ -12,6 +12,7 @@ document.getElementById('survey-form').addEventListener('submit', async (e) => {
   const msg = document.getElementById('message');
   if (res.ok) {
     msg.textContent = '送信完了！ありがとう💖';
+    form.reset(); // ←ここ追加すると次の人が使いやすい♪
     loadChart(); // 再読み込みしてグラフ更新
   } else {
     msg.textContent = '送信失敗しちゃった…😢';
