@@ -33,6 +33,31 @@ async function loadChart() {
     const labels = Object.keys(counts);
     const values = Object.values(counts);
 
+    // 🌈 属性ごとの色を定義！
+    const colorMap = {
+      'ノーマル': '#949495',
+      'ほのお': '#E56C3E',
+      'みず': '#5185C5',
+      'でんき': '#F6D851',
+      'くさ': '#66A945',
+      'こおり': '#91D6F0',
+      'かくとう': '#E09C40',
+      'どく': '#735198',
+      'じめん': '#9C7743',
+      'ひこう': '#A2C3E7',
+      'エスパー': '#DD6B7B',
+      'むし': '#9FA244',
+      'いわ': '#BFB889',
+      'ゴースト': '#684870',
+      'ドラゴン': '#535CA8',
+      'あく': '#4C4948',
+      'はがね': '#69A9C7',
+      'フェアリー': '#DAB4D4'
+    };
+
+    // 🖍️ 回答に応じて色を選ぶ
+    const colors = labels.map(label => colorMap[label] || '#999999');
+
     const ctx = document.getElementById('chart').getContext('2d');
     if (window.myChart) window.myChart.destroy(); // 前のグラフがあれば消す
 
@@ -42,7 +67,7 @@ async function loadChart() {
         labels,
         datasets: [{
           data: values,
-          backgroundColor: ['#ffadad', '#9bf6ff', '#caffbf'],
+          backgroundColor: colors,
           borderWidth: 1
         }]
       },
@@ -55,5 +80,6 @@ async function loadChart() {
     document.getElementById('message').textContent = 'グラフ読み込みに失敗しました😢';
   }
 }
+
 
 window.addEventListener('DOMContentLoaded', loadChart);
