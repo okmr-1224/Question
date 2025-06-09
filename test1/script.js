@@ -1,73 +1,76 @@
-import { Octokit } from "@octokit/rest";
+document.getElementById('survey-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const username = form.username.value;
+  const answer = form.answer.value;
+  const comment = form.comment.value;
 
-export async function handler(event) {
-  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-  const octokit = new Octokit({ auth: GITHUB_TOKEN });
+  const res = await fetch('/.netlify/functions/submit-response', {
+    method: 'POST',
+    body: JSON.stringify({ username, answer, comment })
+  });
 
-  const payload = JSON.parse(event.body);
-  const { username, answer, comment } = payload;
+  const msg = document.getElementById('message');
+  if (res.ok) {
+    msg.textContent = '送信完了！ありがとう💖';
+    form.reset();
+    loadChart();
+  } else {
+    msg.textContent = '送信失敗しちゃった…😢';
+  }
+});
 
-  const owner = "okmr-1224";
-  const repo = "Question";
-  const filePath = "data/responses.json";
-  const branch = "main";
-  const prBranch = `response-${Date.now()}`;
-  const commitMessage = `Add response from ${username}`;
-
+async function loadChart() {
   try {
-    // ✅ mainブランチの最新コミットSHAを取得
-    const { data: mainRef } = await octokit.git.getRef({
-      owner,
-      repo,
-      ref: `heads/${branch}`,
-    });
-    const latestCommitSha = mainRef.object.sha;
+    const response = await fetch('https://raw.githubusercontent.com/okmr-1224/Question/main/data/responses.json');
+    if (!response.ok) throw new Error('fetch失敗！');
+    const data = await response.json();
 
-    // ✅ ファイル内容を取得
-    const { data: file } = await octokit.repos.getContent({ owner, repo, path: filePath, ref: branch });
-    const content = Buffer.from(file.content, "base64").toString();
-    const json = JSON.parse(content);
+    // 集計
+    const counts = {};
+    for (const entry of data) {
+      counts[entry.answer] = (counts[entry.answer] || 0) + 1;
+    }
 
-    // ✅ 新しいデータを追加
-    json.push({ username, answer, comment, timestamp: Date.now() });
-    const newContent = Buffer.from(JSON.stringify(json, null, 2)).toString("base64");
-
-    // ✅ 新しいブランチを作成
-    await octokit.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/${prBranch}`,
-      sha: latestCommitSha
+    const labels = Object.keys(counts);
+    const values = Object.values(counts);
+    const backgroundColors = labels.map(label => {
+      switch (label) {
+        case 'ほのお': return '#ff6b6b';
+        case 'みず': return '#4dabf7';
+        case 'くさ': return '#69db7c';
+        default: return '#d0bfff';
+      }
     });
 
-    // ✅ ファイルを更新
-    await octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      path: filePath,
-      message: commitMessage,
-      content: newContent,
-      branch: prBranch,
+    const ctx = document.getElementById('chart').getContext('2d');
+    if (window.myChart) window.myChart.destroy();
+
+    window.myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: backgroundColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true
+      }
     });
 
-    // ✅ PR作成
-    const { data: pr } = await octokit.pulls.create({
-      owner,
-      repo,
-      title: commitMessage,
-      head: prBranch,
-      base: branch,
-      body: "New survey response submitted.",
-    });
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "PR created", url: pr.html_url })
-    };
+    // 最新3件表示
+    const latestDiv = document.getElementById('latest');
+    const recent = data.slice(-3).reverse();
+    latestDiv.innerHTML = '<h3>最新の回答✨</h3>' + recent.map(entry =>
+      <p><strong>${entry.username}</strong>：${entry.answer} <br><em>${entry.comment || "（コメントなし）"}</em></p>
+    ).join('');
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
+    console.error('グラフ読み込み失敗！', err);
+    document.getElementById('message').textContent = 'グラフ読み込みに失敗しました😢';
   }
 }
+
+window.addEventListener('DOMContentLoaded', loadChart);
