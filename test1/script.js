@@ -12,7 +12,7 @@ document.getElementById('survey-form').addEventListener('submit', async (e) => {
 
   const msg = document.getElementById('message');
   if (res.ok) {
-    msg.textContent = '送信完了！ありがとう💖';
+    msg.textContent = '送信完了！ありがとう😂';
     form.reset();
     loadChart();
   } else {
