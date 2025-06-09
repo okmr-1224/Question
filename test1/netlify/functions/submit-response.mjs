@@ -15,15 +15,32 @@ export async function handler(event) {
   const commitMessage = `Add response from ${username}`;
 
   try {
+    // ✅ mainブランチの最新コミットSHAを取得
+    const { data: mainRef } = await octokit.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${branch}`,
+    });
+    const latestCommitSha = mainRef.object.sha;
+
+    // ✅ ファイル内容を取得
     const { data: file } = await octokit.repos.getContent({ owner, repo, path: filePath, ref: branch });
     const content = Buffer.from(file.content, "base64").toString();
     const json = JSON.parse(content);
 
+    // ✅ 新しいデータを追加
     json.push({ username, answer, comment, timestamp: Date.now() });
     const newContent = Buffer.from(JSON.stringify(json, null, 2)).toString("base64");
 
-    await octokit.git.createRef({ owner, repo, ref: `refs/heads/${prBranch}`, sha: file.sha });
+    // ✅ 新しいブランチを作成
+    await octokit.git.createRef({
+      owner,
+      repo,
+      ref: `refs/heads/${prBranch}`,
+      sha: latestCommitSha
+    });
 
+    // ✅ ファイルを更新
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
@@ -33,6 +50,7 @@ export async function handler(event) {
       branch: prBranch,
     });
 
+    // ✅ PR作成
     const { data: pr } = await octokit.pulls.create({
       owner,
       repo,
