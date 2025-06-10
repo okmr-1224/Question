@@ -1,8 +1,8 @@
 name: Auto Merge Survey PR
 
 on:
-  pull_request:
-    types: [opened, synchronize]  # PR作成・更新時にチェック
+  pull_request_target:
+    types: [opened, synchronize]
 
 permissions:
   pull-requests: write
@@ -23,7 +23,6 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // PRで変更されたファイル一覧を取得
             const files = await github.paginate(
               github.rest.pulls.listFiles,
               { owner, repo, pull_number: prNumber }
