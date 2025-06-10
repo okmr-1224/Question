@@ -55,7 +55,7 @@ button[type="submit"]:hover {
   color: #d6336c;
 }
 
-#chart {
+#typeChart {
   max-width: 300px;
   max-height: 300px;
   margin: 30px auto;
