@@ -94,7 +94,7 @@ async function loadChart() {
     const recent = data.slice(-3).reverse();
 
     latestDiv.innerHTML = '<h3>最新の回答✨</h3>' + recent.map(entry => {
-      const emojis = ['😀','😄','😎','😍','🧐','🤓','🥰','😇','😜','🤠'];
+      const emojis = ['😎','🤓','😇','👦','👴','👩‍🦰','🤖','👮','🐮','👽'];
       const emoji = emojis[entry.timestamp % emojis.length] || '✨';
       const comment = entry.comment || '（コメントなし）';
 
