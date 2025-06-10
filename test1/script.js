@@ -42,7 +42,7 @@ async function loadChart() {
         case 'でんき': return '#F6D851';
         case 'くさ': return '#66A945';
         case 'こおり': return '#91D6F0';
-        case 'かくとう': return 'E09C40';
+        case 'かくとう': return '#E09C40';
         case 'どく': return '#735198';
         case 'じめん': return '#9C7743';
         case 'ひこう': return '#A2C3E7';
