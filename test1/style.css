@@ -1,0 +1,147 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff9f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h3 {
+  text-align: center;
+  color: #ff69b4;
+}
+
+form label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+button[type="submit"] {
+  display: block;
+  margin: 16px auto;
+  padding: 10px 20px;
+  background-color: #ffb6c1;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #ff8fab;
+}
+
+#message {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #d6336c;
+}
+
+#chart {
+  max-width: 300px;
+  max-height: 300px;
+  margin: 30px auto;
+}
+
+#latest {
+  background-color: #fff0f6;
+  border: 2px solid #fcc2d7;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+#latest p {
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+
+  #chart {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #fcc2d7; /* 初期色（フェアリー） */
+  border-radius: 16px;
+  padding: 12px;
+  margin-top: 12px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+}
+
+.card-left {
+  width: 80px;
+  text-align: center;
+  font-size: 64px;
+  margin-right: 16px;
+}
+
+.card-left .username {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.card-right .type {
+  font-size: 18px;
+  font-weight: bold;
+  color: #465c77; /* 初期: みずタイプ */
+}
+
+.card-right .comment {
+  margin-top: 4px;
+  font-size: 14px;
+  font-style: italic;
+  color: #333;
+}
+
+/* タイプ別枠線 */
+.card[data-type="ノーマル"]  { border-color: #949495; }
+.card[data-type="ほのお"]    { border-color: #E56C3E; }
+.card[data-type="みず"]      { border-color: #5185C5; }
+.card[data-type="でんき"]    { border-color: #F6D851; }
+.card[data-type="くさ"]      { border-color: #66A945; }
+.card[data-type="こおり"]    { border-color: #91D6F0; }
+.card[data-type="かくとう"]  { border-color: #E09C40; }
+.card[data-type="どく"]      { border-color: #735198; }
+.card[data-type="じめん"]    { border-color: #9C7743; }
+.card[data-type="ひこう"]    { border-color: #A2C3E7; }
+.card[data-type="エスパー"]  { border-color: #DD6B7B; }
+.card[data-type="むし"]      { border-color: #9FA244; }
+.card[data-type="いわ"]      { border-color: #BFB889; }
+.card[data-type="ゴースト"]  { border-color: #684870; }
+.card[data-type="ドラゴン"]  { border-color: #535CA8; }
+.card[data-type="あく"]      { border-color: #4C4948; }
+.card[data-type="はがね"]    { border-color: #69A9C7; }
+.card[data-type="フェアリー"]{ border-color: #DAB4D4; }
