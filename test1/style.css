@@ -1,0 +1,133 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff9f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h3 {
+  text-align: center;
+  color: #ff69b4;
+}
+
+form label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+button[type="submit"] {
+  display: block;
+  margin: 16px auto;
+  padding: 10px 20px;
+  background-color: #ffb6c1;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #ff8fab;
+}
+
+#message {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #d6336c;
+}
+
+#chart {
+  max-width: 300px;
+  max-height: 300px;
+  margin: 30px auto;
+}
+
+#latest {
+  background-color: #fff0f6;
+  border: 2px solid #fcc2d7;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+#latest p {
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+
+  #chart {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #fcc2d7;
+  border-radius: 16px;
+  padding: 12px;
+  margin-top: 12px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+}
+
+.card-left {
+  width: 80px;
+  text-align: center;
+  font-size: 32px;
+  margin-right: 16px;
+}
+
+.card-left .username {
+  font-size: 14px;
+  color: #555;
+}
+
+.card-right .type {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5185C5; /* 初期: みずタイプ */
+}
+
+.card-right .comment {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* タイプ別色変更 */
+.card-right .type[data-type="ほのお"] { color: #E56C3E; }
+.card-right .type[data-type="でんき"] { color: #F6D851; }
+.card-right .type[data-type="くさ"] { color: #66A945; }
+.card-right .type[data-type="ゴースト"] { color: #684870; }
+/* 必要に応じて他のタイプも追加 */
+
