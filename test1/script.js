@@ -58,11 +58,43 @@ async function loadChart() {
       }
     });
 
+    // グラフ描画処理
+    const ctx = document.getElementById('typeChart').getContext('2d');
+    if (window.typeChart) {
+      window.typeChart.destroy(); // 前のグラフがある場合は破棄
+    }
+
+    window.typeChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: backgroundColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: 'みんなのタイプ分布💫'
+          }
+        }
+      }
+    });
+
+    // 最新コメント表示
     const latestDiv = document.getElementById('latest');
     const recent = data.slice(-3).reverse();
-    
+
     latestDiv.innerHTML = '<h3>最新の回答✨</h3>' + recent.map(entry => {
-      const emojis = ['😀','😄','😎','😍','🧐','🤓','🥰','😇','😜','🤠'];
+      const emojis = ['👩‍🦰','🤖','😎','👮','👴','🤓','👦','😇','🐮','👽'];
       const emoji = emojis[entry.timestamp % emojis.length] || '✨';
       const comment = entry.comment || '（コメントなし）';
 
