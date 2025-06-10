@@ -2,25 +2,45 @@ name: Auto Merge Survey PR
 
 on:
   pull_request:
-    types: [opened]  # PRが作成されたときに発火
+    types: [opened, synchronize]  # PR作成・更新時にチェック
+
+permissions:
+  pull-requests: write
+  contents: read
 
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
 
-    permissions:
-      pull-requests: write
-      contents: write
-
     steps:
-      - name: Auto-merge PR
+      - name: Check changed files and auto-merge if only data/responses.json is touched
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = context.payload.pull_request.number;
-            await github.rest.pulls.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              merge_method: "squash"
-            });
+            const pr = context.payload.pull_request;
+            const prNumber = pr.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // PRで変更されたファイル一覧を取得
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              { owner, repo, pull_number: prNumber }
+            );
+
+            const filePaths = files.map(file => file.filename);
+            const onlyTargetFile = filePaths.length === 1 && filePaths[0] === "data/responses.json";
+
+            if (onlyTargetFile) {
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: prNumber,
+                merge_method: "squash"
+              });
+              console.log("✅ 自動マージ成功：responses.json だけが変更されています");
+            } else {
+              console.log("❌ 自動マージ対象外：他のファイルが含まれています");
+              console.log("変更されたファイル:", filePaths);
+            }
