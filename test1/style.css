@@ -1,0 +1,121 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff9f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h3 {
+  text-align: center;
+  color: #ff69b4;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  display: block;
+  margin: 16px auto;
+  padding: 10px 20px;
+  background-color: #ffb6c1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ff8fab;
+}
+
+#chart {
+  max-width: 300px;
+  margin: 30px auto;
+}
+
+#latest {
+  margin-top: 32px;
+  background-color: #fff0f6;
+  border: 2px solid #fcc2d7;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* お客様の声カード */
+.voice-card {
+  display: flex;
+  border-radius: 12px;
+  padding: 12px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-left: 5px solid #ccc;
+  align-items: center;
+}
+
+/* 左側：顔と名前 */
+.card-left {
+  width: 80px;
+  text-align: center;
+}
+
+.card-left .face {
+  font-size: 36px;
+}
+
+.card-left .username {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* 中央の縦線 */
+.card-divider {
+  width: 1px;
+  background-color: #eee;
+  height: 100%;
+  margin: 0 12px;
+}
+
+/* 右側：タイプとコメント */
+.card-right {
+  flex: 1;
+}
+
+.card-right .type {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.card-right .comment p {
+  margin: 2px 0;
+  font-size: 14px;
+  font-style: italic;
+  color: #333;
+}
+
+/* タイプごとの色設定（例） */
+.voice-card[data-type="みず"] { border-left-color: #5185C5; }
+.voice-card[data-type="ほのお"] { border-left-color: #E56C3E; }
+.voice-card[data-type="でんき"] { border-left-color: #F6D851; }
+.voice-card[data-type="くさ"] { border-left-color: #66A945; }
